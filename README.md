@@ -12,7 +12,10 @@ This project implements an **AI Orchestrator** using Node.js that integrates wit
 4. Captures and returns the container's stdout (JSON or raw text).
 
 ---
+## 🏗️ Architecture Diagram
+![ChatGPT Image May 5, 2025, 12_14_59 AM](https://github.com/user-attachments/assets/00483f40-4733-4869-895f-b52a93d58aed)
 
+---
 ## ⚙️ Technologies Used
 
 - **Node.js (Express)** for orchestration
@@ -34,6 +37,7 @@ Create a `.env` file in the `orchestrator` folder:
 LLM_KEY=your_groq_api_key
 GROQ_MODEL="llama-3.3-70b-versatile"
 LLM_URL=https://api.groq.com/openai/v1/chat/completions
+PORT=3050
 ```
 Although GROQ_MODEL and LLM_URL are included in the .env file for clarity and potential future use, they are not currently referenced in the codebase.
 
@@ -75,32 +79,36 @@ Each container contains a minimal script that performs an NLP operation and prin
 ### 1. Install Dependencies (Orchestrator)
 
 ```bash
-cd orchestrator
+cd BioQuix_Assignment
 npm install
 ```
 
 ### 2. Build All Docker Containers
 
 ```bash
-docker build -t text_length_counter ./services/text_length_counter
-docker build -t basic_sentiment_analyzer ./services/basic_sentiment_analyzer
-docker build -t named_entity_extractor ./services/named_entity_extractor
+docker build -t text_length_counter ./containers/text_length_counter
+docker build -t basic_sentiment_analyzer ./containers/basic_sentiment_analyzer
+docker build -t named_entity_extractor ./containers/named_entity_extractor
 ```
 
 ### 3. Run the Orchestrator
 
 ```bash
-node index.js
+node orchestrator.js
 ```
 
-The server starts on default port (e.g., `localhost:3000`).
+The orchestrator server uses the **PORT** environment variable defined in the .env file to determine which port it should listen on. If PORT is not explicitly provided, it defaults to port 3000.
+This behavior is controlled by the following line in `orchestrator.js`:
+```bash
+const port = process.env.PORT || 3000;
+```
 
 ---
 
 ## 📬 Sample API Request
 
 ```bash
-curl -X POST http://localhost:3000/process \
+curl -X POST http://localhost:3000/request \
   -H "Content-Type: application/json" \
   -d '{"task":"analyze sentiment", "data":"I love AI!"}'
 ```
@@ -115,7 +123,8 @@ docker run --rm -e TEXT_TO_ANALYZE="I love AI!" basic_sentiment_analyzer
 ```json
 {
   "result": {
-    "sentiment": "positive"
+    "sentiment": "positive",
+    "score":0.625  
   }
 }
 ```
@@ -125,16 +134,21 @@ docker run --rm -e TEXT_TO_ANALYZE="I love AI!" basic_sentiment_analyzer
 ## 📁 Folder Structure
 
 ```
-ai-orchestrator/
-├── orchestrator/
-│   ├── index.js
-│   ├── .env
-│   ├── controllers/
-│   └── services/
-│       └── llm_service.js
-├── services/
+BioQuix_Assignment/
+├── containers/
 │   ├── text_length_counter/
 │   ├── basic_sentiment_analyzer/
 │   └── named_entity_extractor/
+├── controllers/
+│   └── process_request.js
+├── routes/
+│   └── request_handler.js
+├── services/
+│   └── llm_service.js
+├── orchestrator.js
+├── package.json
+├── package-lock.json
+├── .gitignore
+├── .env
 └── README.md
 ```
