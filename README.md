@@ -13,7 +13,8 @@ This project implements an **AI Orchestrator** using Node.js that integrates wit
 
 ---
 ## 🏗️ Architecture Diagram
-![ChatGPT Image May 5, 2025, 12_14_59 AM](https://github.com/user-attachments/assets/00483f40-4733-4869-895f-b52a93d58aed)
+![Architecture Diagram](https://github.com/user-attachments/assets/63293e3c-5faa-441b-a270-01e07633705a)
+
 
 ---
 ## ⚙️ Technologies Used
