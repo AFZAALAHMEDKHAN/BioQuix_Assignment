@@ -1,0 +1,11 @@
+{
+  "name": "text-length-counter",
+  "version": "1.0.0",
+  "description": "Counts the length of text from an environment variable",
+  "main": "text_length_counter.js",
+  "scripts": {
+    "start": "node text_length_counter.js"
+  },
+  "author": "Afzaal Ahmed Khan",
+  "license": "ISC"
+}
